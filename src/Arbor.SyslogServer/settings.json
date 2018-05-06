@@ -1,0 +1,21 @@
+{
+    "urn:arbor:kvconfiguration:schema:version": "1.0",
+    "keys": [
+        {
+            "key": "urn:arbor:syslogserver:logging:serilog:default:rollingLogFilePathEnabled",
+            "value": false
+        },
+        {
+            "key": "urn:arbor:syslogserver:logging:serilog:default:rollingLogFilePath",
+            "value": ""
+        },
+        {
+            "key": "urn:arbor:syslogserver:logging:serilog:default:SeqUrl",
+            "value": "http://localhost:5341"
+        },
+        {
+            "key": "urn:arbor:syslogserver:logging:serilog:default:SeqEnabled",
+            "value": true
+        }
+    ]
+}
