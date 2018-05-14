@@ -20,16 +20,18 @@ namespace Arbor.SyslogServer.Areas.Syslog
         private readonly IClock _clock;
         private OnMessageReceived _handler;
 
-        private UdpReceiveResult _receiveResult;
         private Logger _syslogLogger;
 
         public SyslogBackgroundService(ILogger logger, IClock clock, SerilogConfiguration serilogConfiguration)
         {
-            _syslogLogger = new LoggerConfiguration().WriteTo.Seq(serilogConfiguration.SeqUrl).MinimumLevel.Debug().CreateLogger();
+            _syslogLogger = new LoggerConfiguration()
+                .WriteTo.Seq(serilogConfiguration.SeqUrl)
+                .MinimumLevel.Information()
+                .CreateLogger();
 
             _logger = logger;
             _clock = clock;
-            _handler = message => _syslogLogger.Information("{HostName} {Application} {Message} {Severity} {RemoteIP}",
+            _handler = message => _syslogLogger.Information("{HostName} {Facility} {Message} {Severity} {RemoteIP}",
                 message.Hostname,
                 message.Facility,
                 message.Content,
@@ -54,28 +56,29 @@ namespace Arbor.SyslogServer.Areas.Syslog
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
             int port = 514;
-            _logger.Information("Starting UDP client on port {Port}", port);
+            _logger.Debug("Starting UDP client on port {Port}", port);
 
             using (var udp = new UdpClient(port))
             {
                 while (!stoppingToken.IsCancellationRequested)
 
                 {
+                    UdpReceiveResult receiveResult;
                     try
                     {
-                        _logger.Information("Waiting for UDP receive");
-                        _receiveResult = await udp.ReceiveAsync();
-                        _logger.Information("Received UDP message");
+                        _logger.Debug("Waiting for UDP receive");
+                        receiveResult = await udp.ReceiveAsync();
+                        _logger.Debug("Received UDP message {Result}", receiveResult);
                     }
                     catch (ObjectDisposedException)
                     {
                         return;
                     }
 
-                    Match m = re.Match(Encoding.ASCII.GetString(_receiveResult.Buffer));
+                    Match m = re.Match(Encoding.ASCII.GetString(receiveResult.Buffer));
                     if (m.Success)
                     {
-                        Message msg = new Message();
+                        var msg = new Message();
 
                         if (m.Groups["PRI"].Success)
                         {
@@ -103,17 +106,17 @@ namespace Arbor.SyslogServer.Areas.Syslog
 
                             try
                             {
-                                IPHostEntry he = Dns.GetHostEntry(_receiveResult.RemoteEndPoint.Address);
+                                IPHostEntry he = Dns.GetHostEntry(receiveResult.RemoteEndPoint.Address);
                                 msg.Hostname = he.HostName;
                             }
                             catch (SocketException)
                             {
-                                msg.Hostname = _receiveResult.RemoteEndPoint.Address.ToString();
+                                msg.Hostname = receiveResult.RemoteEndPoint.Address.ToString();
                             }
                         }
 
                         msg.Content = m.Groups["MSG"].Value;
-                        msg.RemoteIP = _receiveResult.RemoteEndPoint.Address.ToString();
+                        msg.RemoteIP = receiveResult.RemoteEndPoint.Address.ToString();
                         msg.LocalDate = DateTime.Now;
 
                         _handler?.Invoke(msg);
@@ -128,7 +131,7 @@ namespace Arbor.SyslogServer.Areas.Syslog
             if (_syslogLogger is IDisposable disposable)
             {
                 disposable.Dispose();
-            } 
+            }
         }
     }
 }

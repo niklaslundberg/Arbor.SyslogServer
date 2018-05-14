@@ -38,6 +38,6 @@ namespace Arbor.SyslogServer.Logging
         public string RollingLogFilePath { get; }
 
         public bool IsValid =>
-            !string.IsNullOrWhiteSpace(SeqUrl) && Uri.TryCreate(SeqUrl, UriKind.Absolute, out Uri uri);
+            string.IsNullOrWhiteSpace(SeqUrl) || Uri.TryCreate(SeqUrl, UriKind.Absolute, out Uri uri);
     }
 }

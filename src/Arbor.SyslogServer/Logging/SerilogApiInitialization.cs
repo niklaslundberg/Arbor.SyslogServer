@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Arbor.KVConfiguration.Core;
 using Arbor.KVConfiguration.Urns;
+using Arbor.SyslogServer.Application;
 using Arbor.SyslogServer.Extensions;
 using JetBrains.Annotations;
 using Serilog;
@@ -48,7 +49,7 @@ namespace Arbor.SyslogServer.Logging
                 if (!string.IsNullOrWhiteSpace(serilogConfiguration.SeqUrl) &&
                     Uri.TryCreate(serilogConfiguration.SeqUrl, UriKind.Absolute, out Uri serilogUrl))
                 {
-                    logger.Information("Serilog configured to use Seq with URL {Url}", serilogUrl.AbsolutePath);
+                    logger.Debug("Serilog configured to use Seq with URL {Url}", serilogUrl.AbsolutePath);
                     loggerConfiguration = loggerConfiguration.WriteTo.Seq(serilogUrl.AbsoluteUri);
 
                     seqEnabled = true;
@@ -66,7 +67,7 @@ namespace Arbor.SyslogServer.Logging
                 string rollingLoggingFile = Path.Combine(fileInfo.Directory.FullName,
                     $"{Path.GetFileNameWithoutExtension(fileInfo.Name)}.{{Date}}{Path.GetExtension(fileInfo.Name)}");
 
-                logger.Information("Serilog configured to use rolling file with file path {LogFilePath}",
+                logger.Debug("Serilog configured to use rolling file with file path {LogFilePath}",
                     rollingLoggingFile);
 
                 loggerConfiguration = loggerConfiguration
@@ -75,14 +76,18 @@ namespace Arbor.SyslogServer.Logging
 
             if (seqEnabled)
             {
-                logger.Information("Serilog configured to use Seq with URL {Url}", serilogConfiguration.SeqUrl);
+                logger.Debug("Serilog configured to use Seq with URL {Url}", serilogConfiguration.SeqUrl);
             }
 
             loggerConfiguration = loggerConfiguration.WriteTo.Console();
 
-            Logger appLogger = loggerConfiguration.CreateLogger();
+            Logger appLogger = loggerConfiguration
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Application", App.Name)
+                .CreateLogger();
 
-            appLogger.Information("Initialized app logging");
+            appLogger.Debug("Initialized app logging");
 
             return appLogger;
         }
@@ -121,7 +126,7 @@ namespace Arbor.SyslogServer.Logging
                 .WriteTo.RollingFile(rollingLoggingFile, LogEventLevel.Debug)
                 .CreateLogger();
 
-            logger.Information("Starting app");
+            logger.Information("Starting app {Application}", App.Name);
 
             return logger;
         }

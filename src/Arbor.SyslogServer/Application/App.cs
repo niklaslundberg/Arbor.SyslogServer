@@ -28,6 +28,7 @@ namespace Arbor.SyslogServer.Application
 
         private bool _disposed;
         private bool _disposing;
+        public const string Name = "Arbor.SyslogServer";
 
         public App(
             [NotNull] IWebHostBuilder webHost,
@@ -117,8 +118,8 @@ namespace Arbor.SyslogServer.Application
             WebHost = HostBuilder.Build();
 
             await WebHost.StartAsync(_cancellationTokenSource.Token);
-            
-            _logger.Information("Started webhost");
+
+            _logger.Debug("Started webhost");
 
             return 0;
         }
