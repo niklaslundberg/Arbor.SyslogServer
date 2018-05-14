@@ -144,7 +144,7 @@ namespace Arbor.SyslogServer.Application
 
             ILogger appLogger = SerilogApiInitialization.InitializeAppLogging(configuration, startupLogger);
 
-            appLogger.Information("Started with command line args, {Args}", args);
+            appLogger.Debug("Started with command line args, {Args}", args);
 
             IReadOnlyList<IModule> modules =
                 GetConfigurationModules(configuration, cancellationTokenSource, appLogger, scanAssemblies);

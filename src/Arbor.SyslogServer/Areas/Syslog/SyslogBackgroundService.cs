@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Arbor.SyslogServer.Application;
 using Arbor.SyslogServer.Logging;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,7 @@ namespace Arbor.SyslogServer.Areas.Syslog
         {
             _syslogLogger = new LoggerConfiguration()
                 .WriteTo.Seq(serilogConfiguration.SeqUrl)
+                .Enrich.WithProperty("Application", App.Name)
                 .MinimumLevel.Information()
                 .CreateLogger();
 

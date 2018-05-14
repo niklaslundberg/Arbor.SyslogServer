@@ -28,17 +28,17 @@ namespace Arbor.SyslogServer.Configuration
 
         protected override void Load(ContainerBuilder builder)
         {
-            _logger.Information("Running Urn module");
+            _logger.Debug("Running Urn module");
 
             ImmutableArray<Type> urnMappedTypes = UrnTypes.GetUrnTypesInAssemblies(_assemblies);
 
             if (!urnMappedTypes.Any())
             {
-                _logger.Information("Found no URN-bound types");
+                _logger.Debug("Found no URN-bound types");
                 return;
             }
 
-            _logger.Information("Found URN-bound types {Types}", urnMappedTypes.Select(t => t.Name).ToArray());
+            _logger.Debug("Found URN-bound types {Types}", urnMappedTypes.Select(t => t.Name).ToArray());
 
             if (!bool.TryParse(_keyValueConfiguration[UrnConfigurationConstants.TreatWarningsAsErrors], out bool treatWarningsAsErrors))
             {
@@ -86,7 +86,7 @@ namespace Arbor.SyslogServer.Configuration
                 return;
             }
 
-            _logger.Information("Registering URN-bound instance {Instance}, {Type}", usedInstance, usedInstance.GetType().FullName);
+            _logger.Debug("Registering URN-bound instance {Instance}, {Type}", usedInstance, usedInstance.GetType().FullName);
 
             builder
                 .RegisterInstance(usedInstance)
