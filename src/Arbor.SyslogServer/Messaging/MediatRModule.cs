@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
@@ -29,22 +28,11 @@ namespace Arbor.SyslogServer.Messaging
                 .As<IMediator>()
                 .InstancePerLifetimeScope();
 
-            builder
-                .Register<SingleInstanceFactory>(ctx =>
-                {
-                    var context = ctx.Resolve<IComponentContext>();
-                    return serviceType => context.TryResolve(serviceType, out object o) ? o : null;
-                })
-                .InstancePerLifetimeScope();
-
-            builder
-                .Register<MultiInstanceFactory>(ctx =>
-                {
-                    var context = ctx.Resolve<IComponentContext>();
-                    return serviceType =>
-                        (IEnumerable<object>)context.Resolve(typeof(IEnumerable<>).MakeGenericType(serviceType));
-                })
-                .InstancePerLifetimeScope();
+            builder.Register<ServiceFactory>(ctx =>
+            {
+                var c = ctx.Resolve<IComponentContext>();
+                return t => c.Resolve(t);
+            });
 
             builder
                 .RegisterAssemblyTypes(_scanAssemblies.ToArray())

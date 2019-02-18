@@ -1,6 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arbor.SyslogServer", "Arbor.SyslogServer\Arbor.SyslogServer.csproj", "{8A6EA736-24D1-43B7-A687-C74302F2A537}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arbor.SyslogServer", "Arbor.SyslogServer\Arbor.SyslogServer.csproj", "{8A6EA736-24D1-43B7-A687-C74302F2A537}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62AB6969-E490-4398-8915-3333AA13E5AA}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\build\build.bat = ..\build\build.bat
+		..\docker\build.ps1 = ..\docker\build.ps1
+		..\docker\dockerfile = ..\docker\dockerfile
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\version.json = ..\version.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +27,11 @@ Global
 		{8A6EA736-24D1-43B7-A687-C74302F2A537}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A6EA736-24D1-43B7-A687-C74302F2A537}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A6EA736-24D1-43B7-A687-C74302F2A537}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C406C2DD-31A7-49E3-BB6B-BF68BDCEA82E}
 	EndGlobalSection
 EndGlobal

@@ -32,7 +32,7 @@ namespace Arbor.SyslogServer
         public bool HasValue => _value != null;
 
         private static readonly Lazy<Option<T>> _Lazy = new Lazy<Option<T>>(() => new Option<T>());
-        private T _value;
+        private readonly T _value;
 
         public static readonly Option<T> Empty = _Lazy.Value;
 
