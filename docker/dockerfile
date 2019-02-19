@@ -1,0 +1,12 @@
+ARG TAG=ltsc2019
+
+FROM mcr.microsoft.com/windows/servercore:$TAG
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+ENV urn:arbor:syslogserver:logging:serilog:default:SeqUrl=
+ENV urn:arbor:syslogserver:logging:serilog:default:Enabled=true
+
+EXPOSE 514
+
+CMD powershell .\configure-nuget.ps1 ; .\start-nexus.ps1
