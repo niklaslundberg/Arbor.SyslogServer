@@ -13,6 +13,6 @@ CD %CONFIGURATION%
 
 SET SourceFiles=%CD%
 
-xcopy %SourceFiles% %~dp0\docker\temp
+xcopy %SourceFiles% %~dp0temp
 
 docker build -t arbor-syslogserver:latest %~dp0\docker\temp
