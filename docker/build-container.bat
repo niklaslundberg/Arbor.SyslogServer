@@ -5,6 +5,7 @@ CD ..
 CD Artifacts
 CD WebSites
 CD Arbor.SyslogServer
+CD AnyCPU
 
 DIR /B > files.user
 SET /P Configuration=<files.user
