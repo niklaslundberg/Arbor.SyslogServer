@@ -14,6 +14,6 @@ CD ..
 
 CD docker
 
-powershell build.ps1
+powershell .\build.ps1
 
 EXIT /B %ERRORLEVEL%
