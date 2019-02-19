@@ -8,7 +8,11 @@ IF "%ERRORLEVEL%" NEQ "0" (
     EXIT /B %ERRORLEVEL%
 )
 
-CD ..\docker\
+CD %~dp0
+
+CD ..
+
+CD docker
 
 powershell build.ps1
 
