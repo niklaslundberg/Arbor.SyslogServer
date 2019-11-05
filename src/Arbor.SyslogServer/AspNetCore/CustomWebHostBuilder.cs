@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 
@@ -66,7 +67,7 @@ namespace Arbor.SyslogServer.AspNetCore
                 .UseContentRoot(contentRoot)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    IHostingEnvironment hostingEnvironment = hostingContext.HostingEnvironment;
+                    IWebHostEnvironment hostingEnvironment = hostingContext.HostingEnvironment;
 
                     config
                         .AddJsonFile("appsettings.json", true, true)

@@ -43,7 +43,7 @@ namespace Arbor.SyslogServer.Configuration
 
             MultiSourceKeyValueConfiguration multiSourceKeyValueConfiguration = appSettingsBuilder
                 .Add(new EnvironmentVariableKeyValueConfigurationSource())
-                .Add(new UserConfiguration())
+                .Add(new UserJsonConfiguration())
                 .DecorateWith(new ExpandKeyValueConfigurationDecorator())
                 .Build();
 
